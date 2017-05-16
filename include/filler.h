@@ -14,12 +14,13 @@
 # define FILLER_H
 
 # define MAP (*data)->map
+# define MAPNEW (*data)->new_map
 # define PIECE (*data)->piece
 
 # include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "libft.h"
+# include "../libft/libft.h"
 
 typedef struct	s_game
 {
@@ -35,18 +36,29 @@ typedef struct	s_game
 	char		**piece;
 	int			piece_x;
 	int			piece_y;
+	int			return_y;
+	int			return_x;
+	int			last_y;
+	int			last_x;
+	char		**new_map;
 }				t_game;
 
-typedef struct		s_var
+typedef struct		s_place
 {
 	int				x;
 	int				y;
 	int				l;
-	struct s_var	*next;
-}					t_var;
+	struct s_place	*next;
+}					t_place;
 
-void	get_figure_coorditates(t_game **data);
 void	bzero_data(t_game **data);
 void	free_struct(t_game **data);
+int		check_free_space(t_game **data);
+void	print_result(t_game *data);
+void	get_piece(t_game **data);
+void	get_piece_size(t_game **data);
+
+void print_map(t_game **data);
+void print_piece(t_game **data);
 
 #endif

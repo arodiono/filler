@@ -14,8 +14,24 @@
 # define FILLER_H
 
 # define MAP (*data)->map
-# define MAPNEW (*data)->new_map
-# define PIECE (*data)->piece
+# define MAPN (*data)->new_map
+# define MAPX (*data)->map_x
+# define MAPY (*data)->map_y
+
+# define PC (*data)->piece
+# define PX (*data)->piece_x
+# define PY (*data)->piece_y
+
+# define MF (*data)->my_figure
+# define MX (*data)->my_x
+# define MY (*data)->my_y
+
+# define EF (*data)->enemy_figure
+# define EX (*data)->enemy_x
+# define EY (*data)->enemy_y
+
+# define RY (*data)->return_y
+# define RX (*data)->return_x
 
 # include <fcntl.h>
 # include <stdlib.h>
@@ -38,18 +54,8 @@ typedef struct	s_game
 	int			piece_y;
 	int			return_y;
 	int			return_x;
-	int			last_y;
-	int			last_x;
 	char		**new_map;
 }				t_game;
-
-typedef struct		s_place
-{
-	int				x;
-	int				y;
-	int				l;
-	struct s_place	*next;
-}					t_place;
 
 void	bzero_data(t_game **data);
 void	free_struct(t_game **data);
@@ -57,6 +63,8 @@ int		check_free_space(t_game **data);
 void	print_result(t_game *data);
 void	get_piece(t_game **data);
 void	get_piece_size(t_game **data);
+void	map_copy(t_game **data);
+int		count_dots(t_game **data);
 
 void print_map(t_game **data);
 void print_piece(t_game **data);

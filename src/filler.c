@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/filler.h"
-#include <stdio.h>																//delete
 
 void	get_piece(t_game **data)
 {
@@ -22,9 +21,8 @@ void	get_piece(t_game **data)
 	(*data)->piece = (char **)malloc(sizeof(char *) * (*data)->piece_y );		//leak
 	while (i < (*data)->piece_y && get_next_line(0, &line) > 0)
 	{
-		(*data)->piece[i] = ft_strnew((*data)->piece_x + 1);
-		(*data)->piece[i] = line;
-//		 free(line);
+		(*data)->piece[i] = ft_strsub(line, 0, (*data)->piece_x);
+		free(line);
 		i++;
 	}
 }
@@ -47,9 +45,8 @@ void	get_piece_size(t_game **data)
 			(*data)->piece_x = ft_atoi(&line[i++]);
 			return ;
 		}
-		// free(line);
+		free(line);
 	}
-
 }
 
 void	get_map(t_game **data)
@@ -63,14 +60,14 @@ void	get_map(t_game **data)
 	while (i < (*data)->map_y && get_next_line(0, &line) > 0)
 	{
 		(*data)->map[i] = ft_strsub(line, 4, (*data)->map_x);
-//		free(line);
+		free(line);
 		i++;
 	}
 }
 
 void	get_map_size(t_game **data, char *line)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	if (ft_strstr(line, "Plateau"))
@@ -83,7 +80,7 @@ void	get_map_size(t_game **data, char *line)
 			i++;
 		(*data)->map_x = ft_atoi(&line[i]);
 	}
-	//  free(line);
+	 free(line);
 }
 
 
@@ -92,19 +89,14 @@ int		main(void)
 	t_game	*data;
 	char	*line;
 
-	data = (t_game *)malloc(sizeof(t_game));
+	data = (t_game *)malloc(sizeof(t_game));									//leak
 	data->my_figure = 0;
 	data->enemy_figure = 0;
-	data->last_y = 0;
-	data->last_x = 0;
-	if (get_next_line(0, &line) > 0)
+	if (get_next_line(0, &line) > 0 && data->my_figure == 0)
 	{
-		if (data->my_figure == 0)
-		{
 			data->my_figure = (line[10] == '1') ? 'O' : 'X';
 			data->enemy_figure = data->my_figure == 'O' ? 'X' : 'O';
-			// free(line);
-		}
+			free(line);
 	}
 	while (get_next_line(0, &line) > 0)
 	{
@@ -112,14 +104,12 @@ int		main(void)
 		get_map(&data);
 		get_piece_size(&data);
 		get_piece(&data);
-		if (!(check_free_space(&data)))
-			return (0);
-		// print_map(&data);
-		// pick_best_place(&*data, best);
+		check_free_space(&data);
 		print_result(data);
 		bzero_data(&data);
-		// free_struct(&data);
+		free_struct(&data);
+		// free(line);
 	}
-	// free(data);
+	free(data);
 	return (0);
 }

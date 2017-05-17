@@ -18,10 +18,10 @@ void	get_piece(t_game **data)
 	char	*line;
 
 	i = 0;
-	(*data)->piece = (char **)malloc(sizeof(char *) * (*data)->piece_y );		//leak
-	while (i < (*data)->piece_y && get_next_line(0, &line) > 0)
+	PC = (char **)malloc(sizeof(char *) * PY);
+	while (i < PY && get_next_line(0, &line) > 0)
 	{
-		(*data)->piece[i] = ft_strsub(line, 0, (*data)->piece_x);
+		PC[i] = ft_strsub(line, 0, PX);
 		free(line);
 		i++;
 	}
@@ -39,10 +39,10 @@ void	get_piece_size(t_game **data)
 		{
 			while (line[i] != ' ' && line[i] != '\0')
 				i++;
-			(*data)->piece_y = ft_atoi(&line[i++]);
+			PY = ft_atoi(&line[i++]);
 			while (line[i] != ' ' && line[i] != '\0')
 				i++;
-			(*data)->piece_x = ft_atoi(&line[i++]);
+			PX = ft_atoi(&line[i++]);
 			return ;
 		}
 		free(line);
@@ -55,11 +55,11 @@ void	get_map(t_game **data)
 	char	*line;
 
 	i = 0;
-	(*data)->map = (char **)malloc(sizeof(char *) * (*data)->map_y);			//leak
+	MAP = (char **)malloc(sizeof(char *) * MAPY);
 	get_next_line(0, &line);
-	while (i < (*data)->map_y && get_next_line(0, &line) > 0)
+	while (i < MAPY && get_next_line(0, &line) > 0)
 	{
-		(*data)->map[i] = ft_strsub(line, 4, (*data)->map_x);
+		MAP[i] = ft_strsub(line, 4, MAPX);
 		free(line);
 		i++;
 	}
@@ -74,29 +74,28 @@ void	get_map_size(t_game **data, char *line)
 	{
 		while (line[i] != ' ' && line[i] != '\0')
 			i++;
-		(*data)->map_y = ft_atoi(&line[i]);
+		MAPY = ft_atoi(&line[i]);
 		i++;
 		while (line[i] != ' ' && line[i] != '\0')
 			i++;
-		(*data)->map_x = ft_atoi(&line[i]);
+		MAPX = ft_atoi(&line[i]);
 	}
-	 free(line);
+	free(line);
 }
-
 
 int		main(void)
 {
 	t_game	*data;
 	char	*line;
 
-	data = (t_game *)malloc(sizeof(t_game));									//leak
+	data = (t_game *)malloc(sizeof(t_game));
 	data->my_figure = 0;
 	data->enemy_figure = 0;
 	if (get_next_line(0, &line) > 0 && data->my_figure == 0)
 	{
-			data->my_figure = (line[10] == '1') ? 'O' : 'X';
-			data->enemy_figure = data->my_figure == 'O' ? 'X' : 'O';
-			free(line);
+		data->my_figure = (line[10] == '1') ? 'O' : 'X';
+		data->enemy_figure = data->my_figure == 'O' ? 'X' : 'O';
+		free(line);
 	}
 	while (get_next_line(0, &line) > 0)
 	{
@@ -105,10 +104,9 @@ int		main(void)
 		get_piece_size(&data);
 		get_piece(&data);
 		check_free_space(&data);
-		print_result(data);
+		print_result(&data);
 		bzero_data(&data);
 		free_struct(&data);
-		// free(line);
 	}
 	free(data);
 	return (0);

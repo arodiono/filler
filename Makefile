@@ -27,7 +27,7 @@ INC = $(addprefix -I,$(INC_PATH))
 LIB = $(addprefix -L,$(LIB_PATH))
 
 CC = gcc
-CFLAGS = #-Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 all: lib
 	@echo "\033[37;44m Make $(NAME) \033[0m"
